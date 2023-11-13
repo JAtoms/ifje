@@ -20,13 +20,20 @@ class Lexer {
         String operatorPattern = "[\\+\\-*/%^()]";
         String whitespacePattern = "\\s+";
 
+
+
+
         Pattern tokenPattern = Pattern.compile(
             numberPattern + "|" + operatorPattern + "|" + whitespacePattern
         );
 
+
         Matcher matcher = tokenPattern.matcher(input.substring(pos));
+
+
         if (matcher.find()) {
             String token = matcher.group().trim();
+            System.out.println("token: " + token);
             pos += matcher.end();
 
             // Skip whitespace

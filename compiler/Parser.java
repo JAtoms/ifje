@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 class Parser {
     private Lexer lexer;
     private Token currentToken;
@@ -13,22 +15,25 @@ class Parser {
 
     public Expression parse() {
         while (!currentToken.getType().equals("EOF")) {
-            if (currentToken.getType().equals("NUMBER")) {
-                output.push(new Expression(currentToken.getValue()));
-            } else if (currentToken.getType().equals("(")) {
-                operators.push(currentToken);
-            } else if (currentToken.getType().equals(")")) {
-                while (!operators.isEmpty() && !operators.peek().getType().equals("(")) {
-                    output.push(new Expression(operators.pop().getValue()));
+
+            switch (currentToken.getType()) {
+
+                case "NUMBER" -> output.push(new Expression(currentToken.getValue()));
+                case "(" -> operators.push(currentToken);
+                case ")" -> {
+                    while (!operators.isEmpty() && !operators.peek().getType().equals("(")) {
+                        output.push(new Expression(operators.pop().getValue()));
+                    }
+                    if (!operators.isEmpty() && operators.peek().getType().equals("(")) {
+                        operators.pop();
+                    }
                 }
-                if (!operators.isEmpty() && operators.peek().getType().equals("(")) {
-                    operators.pop();
+                default -> {
+                    while (!operators.isEmpty() && getPrecedence(currentToken) <= getPrecedence(operators.peek())) {
+                        output.push(new Expression(operators.pop().getValue()));
+                    }
+                    operators.push(currentToken);
                 }
-            } else {
-                while (!operators.isEmpty() && getPrecedence(currentToken) <= getPrecedence(operators.peek())) {
-                    output.push(new Expression(operators.pop().getValue()));
-                }
-                operators.push(currentToken);
             }
             currentToken = lexer.getNextToken();
         }
@@ -41,17 +46,11 @@ class Parser {
     }
 
     private int getPrecedence(Token token) {
-        switch (token.getValue()) {
-            case "+":
-            case "-":
-                return 1;
-            case "*":
-            case "/":
-            case "%":
-                return 2;
-            case "^":
-                return 3;
-        }
-        return 0;
+        return switch (token.getValue()) {
+            case "+", "-" -> 1;
+            case "*", "/", "%" -> 2;
+            case "^" -> 3;
+            default -> 0;
+        };
     }
 }
