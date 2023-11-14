@@ -5,6 +5,6 @@ public class Main {
         Parser parser = new Parser(input);
         Expression result = parser.parse();
 
-        System.out.println(result.getContent());
+//        System.out.println(result.getContent());
     }
 }

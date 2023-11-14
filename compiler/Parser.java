@@ -42,6 +42,10 @@ class Parser {
             output.push(new Expression(operators.pop().getValue()));
         }
 
+    for(Token e : operators){
+            System.out.println(e);
+        }
+
         return output.pop();
     }
 

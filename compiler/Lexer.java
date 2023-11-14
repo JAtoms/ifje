@@ -33,13 +33,16 @@ class Lexer {
 
         if (matcher.find()) {
             String token = matcher.group().trim();
-            System.out.println("token: " + token);
+
             pos += matcher.end();
 
             // Skip whitespace
             if (token.matches(whitespacePattern)) {
                 return getNextToken();
             }
+
+            // Print the token
+            System.out.println("token: " + token);
 
             return new Token(token, token);
         }
