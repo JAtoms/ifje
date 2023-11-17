@@ -2,7 +2,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 class Lexer {
-    private String input;
+    private final String input;
     private int pos;
 
     public Lexer(String input) {
@@ -17,36 +17,52 @@ class Lexer {
 
         // Define regular expressions for various tokens
         String numberPattern = "[-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?";
-        String operatorPattern = "[\\+\\-*/%^()]";
         String whitespacePattern = "\\s+";
-
-
-
+        String operatorPattern = "add|sub|mul|pow";
+        String bracketPattern = "[-+*/%()]";
 
         Pattern tokenPattern = Pattern.compile(
-            numberPattern + "|" + operatorPattern + "|" + whitespacePattern
+                numberPattern + "|" + operatorPattern + "|" + whitespacePattern + "|" + bracketPattern
         );
-
 
         Matcher matcher = tokenPattern.matcher(input.substring(pos));
 
 
         if (matcher.find()) {
-            String token = matcher.group().trim();
 
+
+            String token = matcher.group().trim();
+            String tokenType = "";
             pos += matcher.end();
 
             // Skip whitespace
-            if (token.matches(whitespacePattern)) {
+            if (token.isEmpty()) {
                 return getNextToken();
             }
 
-            // Print the token
-            System.out.println("token: " + token);
 
-            return new Token(token, token);
+            else if (token.matches(numberPattern)) {
+                tokenType = "NUMBER";
+            }
+
+            else if (token.matches(bracketPattern)) {
+                tokenType = token;
+            }
+
+
+            if (token.matches(operatorPattern)) {
+                switch (token) {
+                    case "add" -> token = "+";
+                    case "sub" -> token = "-";
+                    case "mul" -> token = "*";
+                    case "pow" -> token = "^";
+                }
+            }
+
+            return new Token(tokenType, token);
         }
 
         return new Token("INVALID", "");
     }
+
 }
