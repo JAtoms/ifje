@@ -49,8 +49,8 @@ class Lexer {
                 tokenType = token;
             }
 
-
-            if (token.matches(operatorPattern)) {
+            else if (token.matches(operatorPattern)) {
+                tokenType = "OPERATOR";
                 switch (token) {
                     case "add" -> token = "+";
                     case "sub" -> token = "-";

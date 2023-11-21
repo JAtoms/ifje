@@ -15,7 +15,6 @@ class Parser {
 
     public void parse() {
 
-
         while (!currentToken.getType().equals("EOF")) {
 
             switch (currentToken.getType()) {
@@ -32,7 +31,7 @@ class Parser {
                 }
                 default -> {
 
-                    while (!operators.isEmpty() ) {
+                    while (!operators.isEmpty() && getPrecedence(currentToken) <= getPrecedence(operators.peek()) ) {
                         output.push(new Expression(operators.pop().getValue()));
                     }
                     operators.push(currentToken);
