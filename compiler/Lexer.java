@@ -30,7 +30,6 @@ class Lexer {
 
         if (matcher.find()) {
 
-
             String token = matcher.group().trim();
             String tokenType = "";
             pos += matcher.end();
@@ -40,13 +39,16 @@ class Lexer {
                 return getNextToken();
             }
 
-
             else if (token.matches(numberPattern)) {
                 tokenType = "NUMBER";
             }
 
             else if (token.matches(bracketPattern)) {
-                tokenType = token;
+                switch (token) {
+                    case "(" -> tokenType = "LPREN";
+                    case ")" -> tokenType = "RPREN";
+                }
+
             }
 
             else if (token.matches(operatorPattern)) {

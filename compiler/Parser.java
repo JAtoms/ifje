@@ -20,8 +20,8 @@ class Parser {
             switch (currentToken.getType()) {
 
                 case "NUMBER" -> output.push(new Expression(currentToken.getValue()));
-                case "(" -> operators.push(currentToken);
-                case ")" -> {
+                case "LPREN" -> operators.push(currentToken);
+                case "RPREN" -> {
                     while (!operators.isEmpty() && !operators.peek().getType().equals("(")) {
                         output.push(new Expression(operators.pop().getValue()));
                     }
