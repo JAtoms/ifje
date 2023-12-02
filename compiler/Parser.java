@@ -1,10 +1,10 @@
 import java.util.Stack;
 
 class Parser {
-    private Lexer lexer;
+    private final Lexer lexer;
     private Token currentToken;
-    private Stack<Expression> output;
-    private Stack<Token> operators;
+    private final Stack<String> output;
+    private final Stack<String> operators;
 
     public Parser(String input) {
         lexer = new Lexer(input);
@@ -13,121 +13,49 @@ class Parser {
         operators = new Stack<>();
     }
 
-    public void parse() {
+    public String parse() {
 
         while (!currentToken.getType().equals("EOF")) {
 
-            switch (currentToken.getType()) {
 
-                case "NUMBER" -> output.push(new Expression(currentToken.getValue()));
-                case "LPREN" -> operators.push(currentToken);
-                case "RPREN" -> {
-                    while (!operators.isEmpty() && !operators.peek().getType().equals("(")) {
-                        output.push(new Expression(operators.pop().getValue()));
-                    }
-                    if (!operators.isEmpty() && operators.peek().getType().equals("")) {
-                        operators.pop();
-                    }
-                }
-                default -> {
+            if (currentToken.getType().equals("OPERATOR")) {
+                operators.push(currentToken.getValue());
+            } else {
+                output.push(currentToken.getValue());
 
-                    while (!operators.isEmpty() && getPrecedence(currentToken) <= getPrecedence(operators.peek()) ) {
-                        output.push(new Expression(operators.pop().getValue()));
-                    }
-                    operators.push(currentToken);
+                if (currentToken.getType().equals("NUMBER") && !operators.isEmpty()) {
+
+                    output.push(operators.pop());
+
                 }
             }
 
             currentToken = lexer.getNextToken();
         }
 
-        while (!operators.isEmpty()) {
-            output.push(new Expression(operators.pop().getValue()));
-        }
+//        convertExpression(this.output);
+        return String.join(" ", this.output);
 
-
-        System.out.println(output);
     }
 
-    private int getPrecedence(Token token) {
 
-        return switch (token.getValue()) {
+    public static void convertExpression(Stack<String> input) {
+        Stack<String> bracket = input;
+        Stack<String> result = new Stack<>();
+
+        while (!bracket.isEmpty() && precedence(bracket.peek()) <= precedence(bracket.peek())) {
+            result.push(bracket.pop());
+        }
+
+        System.out.println(result);
+    }
+
+    private static int precedence(String operator) {
+        return switch (operator) {
             case "+", "-" -> 1;
-            case "*", "/", "%" -> 2;
+            case "*", "/" -> 2;
             case "^" -> 3;
             default -> 0;
         };
     }
 }
-
-
-//import java.util.Stack;
-//
-//class Parser {
-//    private Lexer lexer;
-//    private Token currentToken;
-//    private Stack<Expression> output;
-//    private Stack<Token> operators;
-//
-//    public Parser(String input) {
-//        lexer = new Lexer(input);
-//        currentToken = lexer.getNextToken();
-//        output = new Stack<>();
-//        operators = new Stack<>();
-//    }
-//
-//    public Expression parse() {
-//
-//
-//        while (!currentToken.getType().equals("EOF")) {
-//
-//
-//            switch (currentToken.getType()) {
-//
-//                case "NUMBER" -> {
-//                    output.push(new Expression(currentToken.getValue()));
-//                    System.out.println("NUMBER: " + currentToken.getValue());
-//
-//                }
-//                case "(" -> operators.push(currentToken);
-//                case ")" -> {
-//                    while (!operators.isEmpty() && !operators.peek().getType().equals("(")) {
-//                        output.push(new Expression(operators.pop().getValue()));
-//                    }
-//                    if (!operators.isEmpty() && operators.peek().getType().equals("(")) {
-//                        operators.pop();
-//                    }
-//                }
-//                default -> {
-//                    while (!operators.isEmpty() && getPrecedence(currentToken) <= getPrecedence(operators.peek())) {
-//                        output.push(new Expression(operators.pop().getValue()));
-//                    }
-//                    operators.push(currentToken);
-//                }
-//            }
-//            currentToken = lexer.getNextToken();
-//        }
-//
-//        while (!operators.isEmpty()) {
-//            output.push(new Expression(operators.pop().getValue()));
-//        }
-//
-//        for (Token e : operators) {
-//            System.out.println(e);
-//        }
-//
-//        System.out.println(output);
-//
-//        return output.pop();
-//    }
-//
-//    private int getPrecedence(Token token) {
-//
-//        return switch (token.getValue()) {
-//            case "+", "-" -> 1;
-//            case "*", "/", "%" -> 2;
-//            case "^" -> 3;
-//            default -> 0;
-//        };
-//    }
-//}
