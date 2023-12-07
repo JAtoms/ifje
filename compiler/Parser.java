@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 class Parser {
@@ -5,6 +7,7 @@ class Parser {
     private Token currentToken;
     private final Stack<String> output;
     private final Stack<String> operators;
+    boolean isParen = false;
 
     public Parser(String input) {
         lexer = new Lexer(input);
@@ -13,47 +16,47 @@ class Parser {
         operators = new Stack<>();
     }
 
+
     public String parse() {
-
         while (!currentToken.getType().equals("EOF")) {
+            if (!currentToken.getType().equals("PREN")) {
+                if (currentToken.getType().equals("OPERATOR")) {
+                    operators.push(currentToken.getValue());
 
-
-            if (currentToken.getType().equals("OPERATOR")) {
-                operators.push(currentToken.getValue());
-            } else {
-                output.push(currentToken.getValue());
-
-                if (currentToken.getType().equals("NUMBER") && !operators.isEmpty()) {
-
-                    output.push(operators.pop());
-
+                } else {
+                    output.push(currentToken.getValue());
+                    if (isParen) {
+                        output.push(")");
+                        isParen = false;
+                    }
+                    if (currentToken.getType().equals("NUMBER") && !operators.isEmpty()) {
+                        if(operators.peek().equals("^")){
+                            String temp = output.pop();
+                            output.push("(");
+                            output.push(temp);
+                            isParen = true;
+                        }
+                        output.push(" " + operators.pop()+ " ");
+                    }
                 }
             }
-
             currentToken = lexer.getNextToken();
         }
-
-//        convertExpression(this.output);
-        return String.join(" ", this.output);
-
+        convertExpression(output);
+//        System.out.println(String.join("", output));
+        return String.join("", output);
     }
 
 
     public static void convertExpression(Stack<String> input) {
-        Stack<String> bracket = input;
-        Stack<String> result = new Stack<>();
-
-        while (!bracket.isEmpty() && precedence(bracket.peek()) <= precedence(bracket.peek())) {
-            result.push(bracket.pop());
-        }
-
-        System.out.println(result);
+        List<String> result = new ArrayList<>();
+        System.out.println(String.join("", input));
     }
 
     private static int precedence(String operator) {
         return switch (operator) {
             case "+", "-" -> 1;
-            case "*", "/" -> 2;
+            case "*", "/", "%" -> 2;
             case "^" -> 3;
             default -> 0;
         };

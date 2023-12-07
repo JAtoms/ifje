@@ -19,7 +19,7 @@ class Lexer {
         // Define regular expressions for various tokens
         String numberPattern = "[-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?";
         String whitespacePattern = "\\s+";
-        String operatorPattern = "add|sub|mul|pow";
+        String operatorPattern = "add|sub|mul|pow|mod";
         String bracketPattern = "[-+*/%()]";
 
         Pattern tokenPattern = Pattern.compile(
@@ -45,11 +45,7 @@ class Lexer {
             }
 
             else if (token.matches(bracketPattern)) {
-                switch (token) {
-                    case "(" -> tokenType = "LPREN";
-                    case ")" -> tokenType = "RPREN";
-                }
-
+                tokenType = "PREN";
             }
 
             else if (token.matches(operatorPattern)) {
@@ -59,6 +55,7 @@ class Lexer {
                     case "sub" -> token = "-";
                     case "mul" -> token = "*";
                     case "pow" -> token = "^";
+                    case "mod" -> token = "%";
                 }
             }
 
