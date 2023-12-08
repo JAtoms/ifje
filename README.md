@@ -8,7 +8,7 @@ This Java program is designed to transform a composition of functions, given as 
 
 ## Running the Program
 
-To run the program, follow these steps:
+To run the program in merlin server, follow these steps:
 
 1. Ensure you have Java installed on your system. You can download it from [Oracle](https://www.oracle.com/java/technologies/javase-downloads.html) or use a package manager on your platform.
 
