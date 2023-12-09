@@ -121,14 +121,19 @@ To run the program in merlin server, follow these steps:
 
 2. Sign in to your merlin sever.
 
-2. Compile the Java source files:
+3. Compile the Java source files:
 
    ```bash
    javac Main.java
    ```
-2. To run the compiled source files:
+4. To run the compiled source files:
 
    ```bash
    java Main
+   ```
+5. To run with makefile:
+
+   ```bash
+   make run
    ```
    
