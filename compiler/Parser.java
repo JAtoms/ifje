@@ -18,6 +18,14 @@ class Parser {
 
 
     public String parse() {
+
+        /**
+         * The parser will use the lexer to get tokens
+         * and will use recursive descent to parse the input
+         *
+         * EOF = end of file is also the same as when $ is read
+         */
+
         while (!currentToken.getType().equals("EOF")) {
             if (!currentToken.getType().equals("PREN")) {
                 if (currentToken.getType().equals("OPERATOR")) {
@@ -30,13 +38,13 @@ class Parser {
                         isParen = false;
                     }
                     if (currentToken.getType().equals("NUMBER") && !operators.isEmpty()) {
-                        if(operators.peek().equals("^")){
+                        if (operators.peek().equals("^")) {
                             String temp = output.pop();
                             output.push("(");
                             output.push(temp);
                             isParen = true;
                         }
-                        output.push(" " + operators.pop()+ " ");
+                        output.push(" " + operators.pop() + " ");
                     }
                 }
             }

@@ -2,13 +2,15 @@
 
 # Define the Java compiler
 JAVAC = javac
+
 # Define the Java interpreter
 JAVA = java
+
 # Main class
 MAIN_CLASS = Main
 
 # Source files
-SRC = Main.java Parser.java Lexer.java Expression.java Token.java
+SRC = Main.java Parser.java Lexer.java Token.java
 
 # Build directory
 BUILD_DIR = build
