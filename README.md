@@ -67,7 +67,7 @@ returns the equivalent postfix expression.
 The Token class represents a token in the mathematical expression. 
 Each token has a type (e.g., NUMBER, OPERATOR) and a corresponding value.
 
-    ```bash
+```bash
     class Token {
      public Token(TokenType type, String value) {
           // Constructor takes the token type and value.
@@ -84,7 +84,7 @@ Each token has a type (e.g., NUMBER, OPERATOR) and a corresponding value.
           // ...
      }
     }
-    ```
+  ```
 
    
 ## The Main.java Class
@@ -94,7 +94,7 @@ Lexer and Parser to evaluate a mathematical expression.
 The example expression is defined in the Main class, 
 and the result is printed to the console.
 
-    ```bash
+```bash
     class Main {
      public static void main(String[] args) {
           // Example expression.
@@ -109,7 +109,7 @@ and the result is printed to the console.
           System.out.println(output);
      }
     }
-    ```
+  ```
 
 ## Running the Program
 
