@@ -51,7 +51,6 @@ class Parser {
             currentToken = lexer.getNextToken();
         }
         convertExpression(output);
-//        System.out.println(String.join("", output));
         return String.join("", output);
     }
 
